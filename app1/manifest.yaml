@@ -35,3 +35,29 @@ spec:
     protocol: TCP
     port: 80 #service port
     targetPort: 80 #container ip
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+    name: echoserver
+    namespace: echoserver
+    annotations:
+        kubernetes.io/ingress.class: alb
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:277083512436:certificate/113e805c-a293-464e-a8d1-0e3411e3684a
+        alb.ingress.kubernetes.io/listen-ports: '[ {"HTTPS": 443} ]'
+        alb.ingress.kubernetes.io/tags: Environment=dev,Team=test
+        alb.ingress.kubernetes.io/group.name: expense-1
+spec:
+    rules:
+    - host: "app1.vvsmgold.online"
+      http:
+        paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: app1
+              port:
+                number: 80
