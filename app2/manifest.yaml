@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app2
+  labels:
+    app: app2
+    tier: frontend
+spec:
+  # modify replicas according to your case
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app2
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: app2
+        tier: frontend
+    spec:
+      containers:
+      - name: app2
+        image: venki8686/app2:v1
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: app2
+spec:
+  selector:
+    tier: frontend
+    app: app2
+  ports:
+  - name: nginx-svc-port
+    protocol: TCP
+    port: 80 #service port
+    targetPort: 80 #container ip
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: echoserver 
+    annotations:
+        kubernetes.io/ingress.class: alb
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:277083512436:certificate/113e805c-a293-464e-a8d1-0e3411e3684a
+        alb.ingress.kubernetes.io/listen-ports: '[ {"HTTPS": 443} ]'
+        alb.ingress.kubernetes.io/tags: Environment=dev,Team=test
+        alb.ingress.kubernetes.io/group.name: expense-1
+spec:
+    rules:
+    - host: "app2.vvsmgold.online"
+      http:
+        paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: app2
+              port:
+                number: 80
