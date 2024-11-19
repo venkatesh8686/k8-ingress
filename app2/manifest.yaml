@@ -49,6 +49,7 @@ metadata:
         alb.ingress.kubernetes.io/tags: Environment=dev,Team=test
         alb.ingress.kubernetes.io/group.name: expense-1
 spec:
+    ingressClassName: alb
     rules:
     - host: "app2.vvsmgold.online"
       http:
