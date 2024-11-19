@@ -39,13 +39,13 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-    name: app1 
+    name: app1
     annotations:
-      # kubernetes.io/ingress.class: alb
+      #kubernetes.io/ingress.class: alb
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/target-type: ip
       alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:277083512436:certificate/113e805c-a293-464e-a8d1-0e3411e3684a
-      alb.ingress.kubernetes.io/listen-ports: '[ {"HTTPS": 443} ]'
+      alb.ingress.kubernetes.io/listen-ports: '[ {"HTTPS": 443}]'
       alb.ingress.kubernetes.io/tags: Environment=dev,Team=test
       alb.ingress.kubernetes.io/group.name: expense-1
 spec:
